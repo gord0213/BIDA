@@ -34,7 +34,7 @@ public class Dashboard extends Application {
 	public static BufferedReader reader;
 	public static String strLine;
 	public static int lineNum = 1;
-	
+	public static DecimalFormat DF;
 	
 	public void getCSV(String fileName) throws IOException{
 		try {
@@ -55,16 +55,9 @@ public class Dashboard extends Application {
 				avgHouseAge.add(testInt);
 				
 			}catch (NumberFormatException e) {
-//				try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} 
+
 			}//System.out.println(e); }
 		}
-		
-			
 		
 		calculateAvgPropertyValue();
 		calculateHouseAge();
@@ -76,13 +69,18 @@ public class Dashboard extends Application {
 			try{
 				calculatedAvgPropertyValue += PropertyValue.get(i);
 				System.out.println("passed");
+				System.out.println("Has ran " + i);
+
 				//System.out.println("Next number " + i);
 			}catch(NumberFormatException e){  
 				System.out.println(e);
 			}catch(NullPointerException e){
 				 System.out.println(e);
 			}
-			
+			if ((i+1) == PropertyValue.size()){
+				
+				calculatedAvgPropertyValue/=PropertyValue.size();
+			}
 		}
 
 		System.out.println(calculatedAvgPropertyValue/PropertyValue.size());
@@ -94,7 +92,8 @@ public class Dashboard extends Application {
 			try{
 				calculatesAvgHouseAge += avgHouseAge.get(i);
 				System.out.println("passed");
-
+				System.out.println("Has ran " + i);
+				
 			}catch(NumberFormatException e){
 				e.getMessage();
 				try {
@@ -112,19 +111,23 @@ public class Dashboard extends Application {
 					e1.printStackTrace();
 				}
 			}
+			if ((i+1) == avgHouseAge.size()){
+				calculatesAvgHouseAge/=avgHouseAge.size();
+			}
 		}
+		
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		csvFile = "C:\\Users\\mike\\workspace\\Fall16-Lab1-BIDA\\src\\Assignment1\\property_tax_report.csv";
 		getCSV(csvFile);
-		
-		
+		DF = new DecimalFormat("##.##");
+		System.out.println(DF.format(calculatedAvgPropertyValue) + " is the calculated Average Property Value");
+		DF = new DecimalFormat("##");
+		System.out.println(DF.format(calculatesAvgHouseAge) + " is the calculated Average House Age");
 	}
-	
 	public static void main(String args[]) throws IOException{
 		launch(args);
 	}
-
 }
